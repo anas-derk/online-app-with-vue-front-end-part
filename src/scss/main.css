@@ -1,0 +1,78 @@
+* {
+  font-family: 'Poppins', Arial, sans-serif;
+  --main-color: #F00;
+}
+
+ul, ol {
+  padding: 0;
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.App > div {
+  min-height: calc(100vh - 112px);
+}
+
+h1 {
+  color: var(--main-color);
+  margin-bottom: 60px;
+  position: relative;
+}
+
+h1::after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 50px);
+  bottom: -20px;
+  width: 100px;
+  height: 3px;
+  background-color: var(--main-color);
+}
+
+.cart table, .orders table {
+  margin: auto;
+  width: 100%;
+}
+
+.cart table td, .orders table td {
+  padding: 10px;
+}
+
+.cart table tr, .cart table td, .orders table tr, .orders table td {
+  border: 2px solid #000;
+}
+
+.product-info-box {
+  transition: .3s;
+}
+
+.product-info-box:hover {
+  box-shadow: 1px 1px 7px #F00, -1px -1px 7px #00F;
+  transform: translate(10px, 10px);
+}
+
+.product-info-box.card {
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.product-info-box .product-details-list {
+  list-style-type: square;
+  list-style-position: inside;
+}
+
+.product-info-box .product-details-list li span {
+  color: var(--main-color);
+}
+
+.product-info-box .product-details-list .add-to-cart-form .add-to-cart {
+  margin-top: 20px;
+  width: 100%;
+}
