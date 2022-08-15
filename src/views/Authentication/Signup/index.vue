@@ -86,7 +86,7 @@ export default {
     if (this.userInfo) this.redirectToPage("/");
   },
   computed: {
-    ...mapGetters(["base_api_url,userInfo"]),
+    ...mapGetters(["base_api_url", "userInfo"]),
   },
   components: {
     Header,
