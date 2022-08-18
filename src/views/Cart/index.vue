@@ -96,7 +96,7 @@
               <td colspan="3">
                 <form
                   class="order-all-products-in-your-cart-form"
-                  onSubmit="{handleSubmit}"
+                  @submit.prevent
                 >
                   <p class="alert alert-danger" v-if="orderAllError">
                     {{ orderAllError }}
@@ -105,6 +105,7 @@
                     type="text"
                     placeholder="Please Enter Address Then Click Order All"
                     class="form-control mb-3"
+                    v-model.trim="generalAddress"
                   />
                   <button
                     type="submit"
@@ -348,7 +349,7 @@ export default {
     deleteAllItems() {
       axios
         .delete(
-          `${BASE_API_URL}/api/cart/delete-all/${JSON.parse(userInfo)._id}`
+          `${this.base_api_url}/api/cart/delete-all/${this.userInfo._id}`
         )
         .then(() => {
           document.location.reload();

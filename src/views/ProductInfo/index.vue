@@ -43,6 +43,7 @@
                     required
                     min="1"
                     max="6"
+                    v-model="amount"
                   />
                   <button type="submit" class="btn btn-primary add-to-cart">
                     Add to cart
@@ -134,7 +135,7 @@ export default {
 
           productId: this.productInfo._id,
 
-          userId: JSON.parse(this.userInfo)._id,
+          userId: this.userInfo._id,
         })
         .then(() => {
           setTimeout(() => {

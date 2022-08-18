@@ -42,7 +42,7 @@
         <p class="alert alert-info" v-if="waitMessage">{{ waitMessage }}</p>
         <h6>
           <span>Don't have account ? </span>
-          <Link to="/sign-up">Create Account</Link>
+          <router-link to="/sign-up">Create Account</router-link>
         </h6>
       </div>
       <!-- End Container -->
@@ -83,19 +83,22 @@ export default {
         )
         .then((res) => {
           let data = res.data;
-          if (typeof data == "string") {
-            this.loginError = data;
-            setTimeout(() => {
-              this.loginError = "";
-            }, 2000);
-          } else {
-            localStorage.setItem("user-info", JSON.stringify(data));
-            this.setUserInfo(data);
-            setTimeout(() => {
+          setTimeout(() => {
               this.waitMessage = "";
-              this.redirectToPage("/");
-            }, 2000);
-          }
+              if (typeof data == "string") {
+                this.loginError = data;
+                setTimeout(() => {
+                  this.loginError = "";
+                }, 2000);
+              } else {
+                localStorage.setItem("user-info", JSON.stringify(data));
+                this.setUserInfo(data);
+                setTimeout(() => {
+                  this.waitMessage = "";
+                  this.redirectToPage("/");
+                }, 2000);
+              }
+          }, 2000);
         })
         .catch((err) => console.log(err));
     },

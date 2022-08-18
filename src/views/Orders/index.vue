@@ -24,40 +24,22 @@
           </thead>
           <tbody>
             <tr v-for="(order, index) in orders" :key="order._id">
-              <td>
-                {{ index + 1 }}
-              </td>
-              <td>
-                {{ order.name }}
-              </td>
-              <td>
-                {{ order.price }}
-              </td>
-              <td>
-                {{ order.amount }}
-              </td>
+              <td>{{ index + 1 }}</td>
+              <td>{{ order.name }}</td>
+              <td>{{ order.price }}</td>
+              <td>{{ order.amount }}</td>
               <td>{{ order.price * order.amount }}$</td>
-              <td class="fw-bold">
-                {{ order.status }}
-              </td>
+              <td class="fw-bold">{{ order.status }}</td>
+              <td>{{ order.time }}</td>
               <td>
-                {{ order.time }}
-              </td>
-              <td>
-                <form
-                  class="cancel-order-form"
-                  @submit.prevent
-                  v-if="order.status === 'Pending'"
-                >
+                <form class="cancel-order-form" @submit.prevent v-if="order.status === 'Pending'">
                   <button
                     type="submit"
                     class="btn btn-danger"
                     @click="cancelOrder(order._id)"
-                  >
-                    Cancel
-                  </button>
+                  >Cancel</button>
                 </form>
-                <p v-else>"unavailable now"</p>
+                <p v-else class="mt-3 mb-3">"unavailable now"</p>
               </td>
             </tr>
           </tbody>
@@ -69,12 +51,8 @@
                     type="submit"
                     class="btn btn-danger mb-3"
                     @click="cancelAllOrders"
-                  >
-                    Cancel All Orders
-                  </button>
-                  <p class="mb-2 fw-bold">
-                    (For Orders That Her Status is Just Pending)
-                  </p>
+                  >Cancel All Orders</button>
+                  <p class="mb-2 fw-bold">(For Orders That Her Status is Just Pending)</p>
                 </form>
               </td>
             </tr>
@@ -83,11 +61,7 @@
         <!-- Start Orders Info -->
         <section class="orders-info" v-if="windowInnerWidth < 767">
           <!-- Start Product Details Box -->
-          <div
-            class="order-details-box mb-5"
-            v-for="(order, index) in orders"
-            :key="order._id"
-          >
+          <div class="order-details-box mb-5" v-for="(order, index) in orders" :key="order._id">
             <h5 class="mb-4">Order #{{ index + 1 }} info :</h5>
             <table>
               <tbody>
@@ -135,9 +109,7 @@
                         type="submit"
                         class="btn btn-danger"
                         @click="cancelOrder(order._id)"
-                      >
-                        Cancel
-                      </button>
+                      >Cancel</button>
                     </form>
                     <p v-else>"unavailable now"</p>
                   </td>
@@ -157,12 +129,8 @@
                 type="submit"
                 class="btn btn-danger mb-3"
                 @click="cancelAllOrders"
-              >
-                Cancel All Orders
-              </button>
-              <p class="mb-2 fw-bold">
-                (For Orders That Her Status is Just Pending)
-              </p>
+              >Cancel All Orders</button>
+              <p class="mb-2 fw-bold">(For Orders That Her Status is Just Pending)</p>
             </form>
           </div>
           <!-- End All Orders Cancel Box -->
@@ -175,7 +143,55 @@
 </template>
 
 <script>
+import Header from "@/components/public/Header/index.vue";
+import axios from "axios";
+import { mapGetters } from "vuex";
+
 export default {
   name: "Orders",
+  data() {
+    return {
+      orders: [],
+      windowInnerWidth: window.innerWidth
+    };
+  },
+  components: {
+    Header
+  },
+  mounted() {
+    this.getOrders();
+  },
+  computed: {
+    ...mapGetters(["base_api_url", "userInfo"])
+  },
+  methods: {
+    getOrders() {
+      axios
+        .get(`${this.base_api_url}/api/orders?userId=${this.userInfo._id}`)
+
+        .then(res => {
+          this.orders = res.data;
+        })
+        .catch(err => console.log(err));
+    },
+    cancelOrder(orderId) {
+      axios
+        .delete(`${this.base_api_url}/api/orders/cancel/${orderId}`)
+        .then(() => {
+          document.location.reload();
+        })
+        .catch(err => console.log(err));
+    },
+    cancelAllOrders() {
+      axios
+        .delete(
+          `${this.base_api_url}/api/orders/cancel-all/${this.userInfo._id}`
+        )
+        .then(() => {
+          document.location.reload();
+        })
+        .catch(err => console.log(err));
+    }
+  }
 };
 </script>

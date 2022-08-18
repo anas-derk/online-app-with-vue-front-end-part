@@ -12,14 +12,14 @@
           placeholder="User Name"
           class="form-control mb-4"
           required
-          v-model="userName"
+          v-model.trim="userName"
         />
         <input
           type="email"
           placeholder="Email"
           class="form-control mb-4"
           required
-          v-model="email"
+          v-model.trim="email"
         />
         <input
           type="password"
@@ -28,7 +28,7 @@
           required
           pattern=".{8,}"
           title="Password Must contain at least Eight Number"
-          v-model="password"
+          v-model.trim="password"
         />
         <input
           type="password"
@@ -37,14 +37,13 @@
           required
           pattern=".{8,}"
           title="Password Must contain at least Eight Number"
-          v-model="confirmPassword"
+          v-model.trim="confirmPassword"
         />
         <button type="submit" class="btn btn-primary create-account-btn">
           Create Account
         </button>
       </form>
       <!-- End Signup Form -->
-      {signupError &&
       <p class="alert alert-danger error-in-user-side" v-if="signupError">
         {{ signupError }}
       </p>
@@ -56,7 +55,7 @@
       </p>
       <h6>
         <span>Already have account ? </span>
-        <Link to="/login">Login</Link>
+        <router-link to="/login">Login</router-link>
       </h6>
     </div>
     <!-- End Container -->
@@ -107,7 +106,7 @@ export default {
           "Please Wait While Verification And Signup ...";
         // create account by API Call
         axios
-          .post(`http://localhost:3000/api/auth/signup`, {
+          .post(`${this.base_api_url}/api/auth/signup`, {
             userName: this.userName,
             password: this.password,
             email: this.email,
