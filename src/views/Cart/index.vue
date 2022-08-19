@@ -22,22 +22,20 @@
           </thead>
           <tbody>
             <tr v-for="(cart, index) in carts" :key="cart._id">
-              <td>
-                {{ index + 1 }}
-              </td>
-              <td>
-                {{ cart.name }}
-              </td>
+              <td>{{ index + 1 }}</td>
+              <td>{{ cart.name }}</td>
               <td>{{ cart.price }}$</td>
               <td>
                 <input
                   type="number"
                   class="form-control"
-                  v-model="cart.amount"
+                  :value="cart.amount"
+                  @change="handleAmountChange($event, index)"
                 />
-                <p class="alert alert-danger mt-4" v-if="errorMessage">
-                  {errorMessage}
-                </p>
+                <p
+                  class="alert alert-danger mt-4"
+                  v-if="errorMessage && index === errorMessageIndex"
+                >{{errorMessage}}</p>
               </td>
               <td>{{ cart.price * cart.amount }}$</td>
               <td>
@@ -46,33 +44,26 @@
                     type="submit"
                     class="btn btn-success d-block mx-auto mb-3"
                     @click="editItem(cart.productId, amountList[index], index)"
-                  >
-                    change order amount
-                  </button>
+                  >change order amount</button>
                   <hr />
-                  <p class="alert alert-danger" v-if="orderError">
-                    {{ orderError }}
-                  </p>
+                  <p class="alert alert-danger" v-if="orderError">{{ orderError }}</p>
                   <input
                     type="text"
                     placeholder="Please Enter Address Then Click Order"
                     class="form-control mb-3"
+                    @change="handleAddressChange($event, index)"
                   />
                   <button
                     type="submit"
                     class="btn btn-success d-block mx-auto mb-3"
                     @click="orderItem(cart, addressList[index], index)"
-                  >
-                    Order
-                  </button>
+                  >Order</button>
                   <hr />
                   <button
                     type="submit"
                     class="btn btn-danger d-block mx-auto"
                     @click="deleteItem(cart._id)"
-                  >
-                    Delete
-                  </button>
+                  >Delete</button>
                 </form>
               </td>
             </tr>
@@ -80,40 +71,20 @@
           <tfoot v-if="carts.length > 1">
             <tr>
               <td colspan="3">
-                <form
-                  class="delete-all-products-in-your-cart-form"
-                  @submit.prevent
-                >
-                  <button
-                    type="submit"
-                    class="btn btn-danger"
-                    @click="deleteAllItems"
-                  >
-                    Delete All
-                  </button>
+                <form class="delete-all-products-in-your-cart-form" @submit.prevent>
+                  <button type="submit" class="btn btn-danger" @click="deleteAllItems">Delete All</button>
                 </form>
               </td>
               <td colspan="3">
-                <form
-                  class="order-all-products-in-your-cart-form"
-                  @submit.prevent
-                >
-                  <p class="alert alert-danger" v-if="orderAllError">
-                    {{ orderAllError }}
-                  </p>
+                <form class="order-all-products-in-your-cart-form" @submit.prevent>
+                  <p class="alert alert-danger" v-if="orderAllError">{{ orderAllError }}</p>
                   <input
                     type="text"
                     placeholder="Please Enter Address Then Click Order All"
                     class="form-control mb-3"
                     v-model.trim="generalAddress"
                   />
-                  <button
-                    type="submit"
-                    class="btn btn-success"
-                    @click="orderAllItems"
-                  >
-                    Order All
-                  </button>
+                  <button type="submit" class="btn btn-success" @click="orderAllItems">Order All</button>
                 </form>
               </td>
             </tr>
@@ -122,11 +93,7 @@
         <!-- Start Products Info -->
         <section class="products-info" v-if="windowInnerWidth < 767">
           <!-- Start Product Details Box -->
-          <div
-            class="product-details-box mb-5"
-            v-for="(cart, index) in carts"
-            :key="cart._id"
-          >
+          <div class="product-details-box mb-5" v-for="(cart, index) in carts" :key="cart._id">
             <h5 class="mb-4">Product #{{ index + 1 }} info :</h5>
             <table>
               <tbody>
@@ -168,16 +135,10 @@
                         @click="
                           editItem(cart.productId, amountList[index], index)
                         "
-                      >
-                        change order amount
-                      </button>
-                      <p class="alert alert-danger mt-4" v-if="errorMessage">
-                        {{ errorMessage }}
-                      </p>
+                      >change order amount</button>
+                      <p class="alert alert-danger mt-4" v-if="errorMessage">{{ errorMessage }}</p>
                       <hr />
-                      <p class="alert alert-danger" v-if="orderError">
-                        {{ orderError }}
-                      </p>
+                      <p class="alert alert-danger" v-if="orderError">{{ orderError }}</p>
                       <input
                         type="text"
                         placeholder="Please Enter Address Then Click Order"
@@ -187,17 +148,13 @@
                         type="submit"
                         class="btn btn-success d-block mx-auto mb-3"
                         @click="orderItem(cart, addressList[index], index)"
-                      >
-                        Order
-                      </button>
+                      >Order</button>
                       <hr />
                       <button
                         type="submit"
                         class="btn btn-danger d-block mx-auto"
                         @click="deleteItem(cart._id)"
-                      >
-                        Delete
-                      </button>
+                      >Delete</button>
                     </form>
                   </td>
                 </tr>
@@ -212,44 +169,20 @@
             v-if="carts.length > 1"
           >
             <form
-              class="
-                delete-all-products-in-your-cart-form
-                mb-3
-                p-3
-                border border-3
-              "
+              class="delete-all-products-in-your-cart-form mb-3 p-3 border border-3"
               @submit.prevent
             >
-              <h6 class="mb-3">
-                For Delete All Products Please On Button In Down:
-              </h6>
-              <button
-                type="submit"
-                class="btn btn-danger"
-                @click="deleteAllItems"
-              >
-                Delete All
-              </button>
+              <h6 class="mb-3">For Delete All Products Please On Button In Down:</h6>
+              <button type="submit" class="btn btn-danger" @click="deleteAllItems">Delete All</button>
             </form>
-            <form
-              class="order-all-products-in-your-cart-form p-3 border border-3"
-              @submit.prevent
-            >
-              <p class="alert alert-danger" v-if="orderAllError">
-                {{ orderAllError }}
-              </p>
+            <form class="order-all-products-in-your-cart-form p-3 border border-3" @submit.prevent>
+              <p class="alert alert-danger" v-if="orderAllError">{{ orderAllError }}</p>
               <input
                 type="text"
                 placeholder="Please Enter Address Then Click Order All"
                 class="form-control mb-3"
               />
-              <button
-                type="submit"
-                class="btn btn-success"
-                @click="orderAllItems"
-              >
-                Order All
-              </button>
+              <button type="submit" class="btn btn-success" @click="orderAllItems">Order All</button>
             </form>
           </div>
           <!-- End Shortcut Processes Box -->
@@ -276,21 +209,22 @@ export default {
       generalAddress: "",
       windowInnerWidth: window.innerWidth,
       errorMessage: "",
+      errorMessageIndex: null,
       orderError: "",
-      orderAllError: "",
+      orderAllError: ""
     };
   },
   computed: {
-    ...mapGetters(["userInfo", "base_api_url"]),
+    ...mapGetters(["userInfo", "base_api_url"])
   },
   components: {
-    Header,
+    Header
   },
   mounted() {
     axios
       .get(`${this.base_api_url}/api/cart?userId=${this.userInfo._id}`)
 
-      .then((res) => {
+      .then(res => {
         let data = res.data;
 
         this.carts = data;
@@ -303,27 +237,21 @@ export default {
 
         this.amountList = tempAmountList;
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   },
   methods: {
     ...mapActions(["redirectToPage"]),
     handleAmountChange(e, index) {
-      let tempAmountList = this.amountList.map((amount) => amount);
-      tempAmountList[index] = parseInt(e.target.value);
-      this.amountList = tempAmountList;
+      this.amountList[index] = parseInt(e.target.value);
     },
     handleAddressChange(e, index) {
-      let tempAddressList = this.addressList.map((address) => address);
-
-      tempAddressList[index] = e.target.value;
-
-      this.addressList = tempAddressList;
+      this.addressList[index] = e.target.value;
     },
     editItem(productId, newAmount, index) {
       if (this.amountList[index] < 1 || this.amountList[index] > 6) {
         this.errorMessage =
           "Sorry Can't Edit Amount Because It Less Than One Or Greater Than 6 ...";
-
+        this.errorMessageIndex = index;
         const amountInputError = setTimeout(() => {
           this.errorMessage = "";
 
@@ -335,7 +263,7 @@ export default {
           .then(() => {
             document.location.reload();
           })
-          .catch((err) => console.log(err));
+          .catch(err => console.log(err));
       }
     },
     deleteItem(cartId) {
@@ -344,17 +272,15 @@ export default {
         .then(() => {
           document.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
     deleteAllItems() {
       axios
-        .delete(
-          `${this.base_api_url}/api/cart/delete-all/${this.userInfo._id}`
-        )
+        .delete(`${this.base_api_url}/api/cart/delete-all/${this.userInfo._id}`)
         .then(() => {
           document.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     },
     orderItem(productInfo, address, index) {
       if (!this.addressList[index]) {
@@ -369,12 +295,12 @@ export default {
         axios
           .post(`${this.base_api_url}/api/orders`, {
             productInfo,
-            address,
+            address
           })
           .then(() => {
             this.redirectToPage("/orders");
           })
-          .catch((err) => console.log(err));
+          .catch(err => console.log(err));
       }
     },
     orderAllItems() {
@@ -386,19 +312,16 @@ export default {
         }, 3000);
       } else {
         axios
-          .post(
-            `${this.base_api_url}/api/orders/order-all-items`,
-            {
-              carts: this.carts,
-              generalAddress: this.generalAddress,
-            }
-          )
+          .post(`${this.base_api_url}/api/orders/order-all-items`, {
+            carts: this.carts,
+            generalAddress: this.generalAddress
+          })
           .then(() => {
             this.redirectToPage("/orders");
           })
-          .catch((err) => console.log(err));
+          .catch(err => console.log(err));
       }
-    },
-  },
+    }
+  }
 };
 </script>

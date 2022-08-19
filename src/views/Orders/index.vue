@@ -44,7 +44,7 @@
             </tr>
           </tbody>
           <tfoot>
-            <tr v-if="orders.length > 1">
+            <tr v-if="orders.length > 1 && ordersStatus.includes('Pending')">
               <td colspan="8">
                 <form class="cancel-all-orders-form" @submit.prevent>
                   <button
@@ -152,6 +152,7 @@ export default {
   data() {
     return {
       orders: [],
+      ordersStatus: [],
       windowInnerWidth: window.innerWidth
     };
   },
@@ -171,6 +172,9 @@ export default {
 
         .then(res => {
           this.orders = res.data;
+          this.orders.forEach(element => {
+            this.ordersStatus.push(element.status);
+          });
         })
         .catch(err => console.log(err));
     },
