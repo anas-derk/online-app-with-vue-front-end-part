@@ -221,6 +221,7 @@ export default {
     Header
   },
   mounted() {
+    window.addEventListener("resize", this.resizeHandler);
     axios
       .get(`${this.base_api_url}/api/cart?userId=${this.userInfo._id}`)
 
@@ -239,8 +240,14 @@ export default {
       })
       .catch(err => console.log(err));
   },
+  unmounted() {
+    window.removeEventListener("resize", this.resizeHandler);
+  },
   methods: {
     ...mapActions(["redirectToPage"]),
+    resizeHandler(){
+      this.windowInnerWidth = window.innerWidth;
+    },
     handleAmountChange(e, index) {
       this.amountList[index] = parseInt(e.target.value);
     },

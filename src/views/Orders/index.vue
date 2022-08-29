@@ -160,12 +160,19 @@ export default {
     Header
   },
   mounted() {
+    window.addEventListener("resize", this.resizeHandler);
     this.getOrders();
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.resizeHandler);
   },
   computed: {
     ...mapGetters(["base_api_url", "userInfo"])
   },
   methods: {
+    resizeHandler() {
+      this.windowInnerWidth = window.innerWidth;
+    },
     getOrders() {
       axios
         .get(`${this.base_api_url}/api/orders?userId=${this.userInfo._id}`)

@@ -180,11 +180,18 @@ export default {
     if (!this.userInfo) this.redirectToPage("/login");
     else if (!this.userInfo.isAdmin) this.redirectToPage("/");
     else {
+      window.addEventListener("resize", this.resizeHandler);
       this.getAllOrders();
     }
   },
+  unmounted() {
+    window.removeEventListener("resize", this.resizeHandler);
+  },
   methods: {
     ...mapActions(["redirectToPage"]),
+    resizeHandler() {
+      this.windowInnerWidth = window.innerWidth;
+    },
     getSpecificOrders(orderStatus) {
       axios
         .get(
