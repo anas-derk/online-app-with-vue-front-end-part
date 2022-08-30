@@ -1,100 +1,102 @@
 <template>
-  <div>
-    <!-- Start Home Page -->
-    <Header></Header>
-    <div class="home pt-5 pb-5">
-      <!-- Start Container -->
-      <div class="container">
-        <h1 class="text-center fw-bold mb-5">Home Page - Products Gallery</h1>
-        <!-- Start Products Filter Form -->
-        <form
-          class="products-filter-form text-center mb-4"
-          @submit.prevent="get_products_by_category"
+  <!-- Start Home Page -->
+  <Header></Header>
+  <div class="home pt-5 pb-5">
+    <!-- Start Container -->
+    <div class="container">
+      <h1 class="text-center fw-bold mb-5">Home Page - Products Gallery</h1>
+      <!-- Start Products Filter Form -->
+      <form
+        class="products-filter-form text-center mb-4"
+        @submit.prevent="get_products_by_category"
+      >
+        <select class="form-select" v-model="category">
+          <option value="" hidden>Choose Category</option>
+          <option value="all">All</option>
+          <option value="phones">Phones</option>
+          <option value="clothes">Clothes</option>
+          <option value="computers">Computers</option>
+        </select>
+        <button
+          type="submit"
+          class="btn btn-danger products-filter-button mt-4"
         >
-          <select class="form-select" v-model="category">
-            <option value="" hidden>Choose Category</option>
-            <option value="all">All</option>
-            <option value="phones">Phones</option>
-            <option value="clothes">Clothes</option>
-            <option value="computers">Computers</option>
-          </select>
-          <button
-            type="submit"
-            class="btn btn-danger products-filter-button mt-4"
-          >
-            Products Filter
-          </button>
-        </form>
-        <!-- End Products Filter Form -->
-        <p class="alert alert-danger" v-if="notFoundProductsError">
-          {{ notFoundProductsError }}
-        </p>
-        <!-- Start Grid System -->
-        <div class="row">
-          <!-- Start Column -->
-          <div class="col-lg-4" v-for="(product, index) in products" :key="product._id">
-            <!-- Start Product Info Box -->
-            <div class="card product-info-box mb-5">
-              <!-- Start Product Image Box -->
-              <div class="product-image-box mb-4">
-                <!-- Start Product Image -->
-                <img
-                  :src="images[index]"
-                  class="card-img-top"
-                  :style="{ height: '250px' }"
-                  alt="Sorry !!"
-                />
-                <!-- End Product Image -->
-              </div>
-              <!-- End Product Image Box -->
-              <!-- Start Product Details List -->
-              <ul class="card-body product-details-list">
-                <li class="mb-2">
-                  Product Name:
-                  <router-link
-                    class="card-title product-name"
-                    :to="{
-                      name: 'Product Info',
-                      params: { productId: product._id },
-                    }"
-                  >
-                    <span class="fw-bold"> {{ product.name }}</span>
-                  </router-link>
-                </li>
-                <li class="product-price mb-2">
-                  Product Price: <span class="fw-bold">{{ product.price }}</span
-                  >$
-                </li>
-                <li class="product-category mb-2">
-                  Product Category:
-                  <span class="fw-bold">{{ product.category }}</span>
-                </li>
-                <li class="card-text product-description mb-2">
-                  Product Description:
-                  <span class="fw-bold">{{ product.description }}</span>
-                </li>
+          Products Filter
+        </button>
+      </form>
+      <!-- End Products Filter Form -->
+      <p class="alert alert-danger" v-if="notFoundProductsError">
+        {{ notFoundProductsError }}
+      </p>
+      <!-- Start Grid System -->
+      <div class="row">
+        <!-- Start Column -->
+        <div
+          class="col-lg-4"
+          v-for="(product, index) in products"
+          :key="product._id"
+        >
+          <!-- Start Product Info Box -->
+          <div class="card product-info-box mb-5">
+            <!-- Start Product Image Box -->
+            <div class="product-image-box mb-4">
+              <!-- Start Product Image -->
+              <img
+                :src="images[index]"
+                class="card-img-top"
+                :style="{ height: '250px' }"
+                alt="Sorry !!"
+              />
+              <!-- End Product Image -->
+            </div>
+            <!-- End Product Image Box -->
+            <!-- Start Product Details List -->
+            <ul class="card-body product-details-list">
+              <li class="mb-2">
+                Product Name:
                 <router-link
-                  v-if="userInfo"
-                  class="btn btn-primary add-to-cart w-100 mt-3"
+                  class="card-title product-name"
                   :to="{
                     name: 'Product Info',
                     params: { productId: product._id },
                   }"
                 >
-                  Add to cart
+                  <span class="fw-bold"> {{ product.name }}</span>
                 </router-link>
-              </ul>
-              <!-- End Product Details List -->
-            </div>
-            <!-- End Product Info Box -->
+              </li>
+              <li class="product-price mb-2">
+                Product Price: <span class="fw-bold">{{ product.price }}</span
+                >$
+              </li>
+              <li class="product-category mb-2">
+                Product Category:
+                <span class="fw-bold">{{ product.category }}</span>
+              </li>
+              <li class="card-text product-description mb-2">
+                Product Description:
+                <span class="fw-bold">{{ product.description }}</span>
+              </li>
+              <router-link
+                v-if="userInfo"
+                class="btn btn-primary add-to-cart w-100 mt-3"
+                :to="{
+                  name: 'Product Info',
+                  params: { productId: product._id },
+                }"
+              >
+                Add to cart
+              </router-link>
+            </ul>
+            <!-- End Product Details List -->
           </div>
-          <!-- End Column -->
+          <!-- End Product Info Box -->
         </div>
-        <!-- End Container -->
+        <!-- End Column -->
       </div>
+      <!-- End Container -->
     </div>
-    <!-- End Home Page -->
   </div>
+  <!-- End Home Page -->
 </template>
 
 <script>
